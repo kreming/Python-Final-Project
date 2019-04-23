@@ -1,4 +1,5 @@
 import pygame as pg
+from definitions import *
 
 class Player:
     def __init__(self, x, y, size):
@@ -8,7 +9,6 @@ class Player:
         self.trail = []
 
         # Player draw color
-        from definitions import YELLOW
         self.color = YELLOW
 
         self.relX = None
@@ -22,8 +22,10 @@ class Player:
         if self.x >= len(map[0]) or self.y >= len(map) or map[self.y][self.x] == '1': # Wall
             self.x = oldPos[0]
             self.y = oldPos[1]
+            return False # Move computer?
         else:
             self.trail.append([oldPos])
+            return True
     
     def checkWin(self, map):
         return map[self.y][self.x] == '3'
@@ -45,7 +47,6 @@ class Computer:
         self.path = path
 
         # Computer draw color
-        from definitions import BLUE
         self.color = BLUE
 
         self.relX = None
@@ -72,8 +73,8 @@ class Computer:
 
 class Camera:
     def __init__(self, width, height, tileSize, player, map):
-        self.x = player.x - ((width / tileSize) / 2)
-        self.y = player.y - ((height / tileSize) / 2)
+        self.x = -(((width/tileSize) - len(map[0])) / 2)
+        self.y = -(((height/tileSize) - len(map)) / 2)
         self.width = width
         self.height = height
         self.tileSize = tileSize
@@ -106,15 +107,16 @@ class TileDisplay:
         self.y = y
         self.tileSize = tileSize
 
-        from definitions import *
         if ID == '0':
             self.color = BLACK
-        if ID == '1':
+        elif ID == '1':
             self.color = LIGHTGREY
-        if ID == '2':
+        elif ID == '2':
             self.color = RED
-        if ID == '3':
+        elif ID == '3':
             self.color = GREEN
+        else:
+            self.color = WHITE
 
         self.relX = None
         self.relY = None

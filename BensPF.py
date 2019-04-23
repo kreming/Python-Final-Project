@@ -89,8 +89,10 @@ class Pathfinding():
     #                        U        D       R       L
     neighborRelativeVals = [[-1, 0], [1, 0], [0, 1], [0, -1]]
 
-    def __init__(self, mazeOrig):
+    def __init__(self, mazeOrig, startLocation, solutionLocation):
         self.mazeOrig = mazeOrig
+        self.startLocation = startLocation
+        self.solutionLocation = solutionLocation
 
     # Pass the start location to this function
     def fillFirstValue(self, coordinate):
@@ -107,9 +109,9 @@ class Pathfinding():
         neighborY = neighborCoordinate[1]
         end = 0
         # Check for end
-        if self.mazePaths[x + neighborX][y + neighborY] == "X":
+        if self.mazePaths[x + neighborX][y + neighborY] == '3':
             # Access solutionLocation as a global variable (You get an error if you don't for some reason)
-            global solutionLocation
+            #global solutionLocation
             self.solutionLocation += [x + neighborX]
             self.solutionLocation += [y + neighborY]
             end = 1
@@ -133,7 +135,7 @@ class Pathfinding():
             pass
 
         # Check if the path maze has already been filled in at this coordinate
-        elif self.mazePaths[x+neighborX][y+neighborY] != " ":
+        elif self.mazePaths[x+neighborX][y+neighborY] != "0":
             # Keep valid at 0, it's already been filled in
             pass
 
@@ -190,33 +192,24 @@ class Pathfinding():
         self.rowCount = 0
         self.colCount = 0
         self.mazePaths = self.mazeOrig
-        self.startLocation = []
-        self.solutionLocation = []
         neighborsList = []
         finalPath = []
-
-        # Find Start Location
-        for i, row in enumerate(self.mazeOrig):
-            for j, column in enumerate(self.mazeOrig[i]):
-                if self.mazeOrig[i][j] == "O":
-                    startLocation += [i]
-                    startLocation += [j]
 
         # Get amount of rows and cols
         for i, row in enumerate(self.mazeOrig):
             for j, column in enumerate(self.mazeOrig[i]):
                 if i == 0:
-                    colCount += 1
-            rowCount += 1
+                    self.colCount += 1
+            self.rowCount += 1
 
         # Check if the user did not provide a start location
-        if startLocation == []:
+        if self.startLocation == []:
             print("The start location was not found. Please put a 'O' somewhere in the maze")
             exit()
 
         neighborsQ = queue.Queue()
-        neighborsQ.put(startLocation)
-        self.fillFirstValue(startLocation)
+        neighborsQ.put(self.startLocation)
+        self.fillFirstValue(self.startLocation)
 
         while self.solutionLocation == []:
             tempCoordinate = neighborsQ.get()
