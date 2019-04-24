@@ -23,7 +23,7 @@ class TitleScreen:
         def advanceScreens():
             parent.setScreen(PLAYSCREEN)
 
-        self.buttons.append(Button('playBtn.png', pg.Rect(100, 100, 210, 240),  advanceScreens))
+        self.buttons.append(Button('playBtn.png', pg.Rect(100, 100, 309, 128),  advanceScreens))
 
     def draw(self, screen):
         if self.running:

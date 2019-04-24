@@ -8,16 +8,25 @@ class Player:
         self.size = size
         self.trail = []
 
+        self.xVel = 0
+        self.yVel = 0
+
         # Player draw color
         self.color = YELLOW
 
         self.relX = None
         self.relX = None
     
-    def move(self, map, dir):
+    def clearVel(self):
+        self.xVel = 0
+        self.yVel = 0
+
+    def move(self, map):
         oldPos = [self.x, self.y]
-        self.x += dir[0]
-        self.y += dir[1]
+        #self.x += dir[0]
+        #self.y += dir[1]
+        self.x += self.xVel
+        self.y += self.yVel
 
         if self.x >= len(map[0]) or self.y >= len(map) or map[self.y][self.x] == '1': # Wall
             self.x = oldPos[0]
@@ -54,8 +63,8 @@ class Computer:
     
     def move(self):
         if len(self.path) >= 1: # Spaces left to move
-            self.x = self.path[0][0]
-            self.y = self.path[0][1]
+            self.x = self.path[0][1]
+            self.y = self.path[0][0]
             self.path = self.path[1:]
     
     def checkWin(self):

@@ -16,14 +16,12 @@ TITLE = "Pathfinder®"
 BGCOLOR = DARKGREY
 
 TILESIZE = 32
-COMPUTER_PLAY_RATE = 10  # 50 is good, 10 for testing quickly
+COMPUTER_PLAY_RATE = 20  # 50 is good, 10 for testing quickly
+PLAYER_MOVE_RATE = 5 # How many frames between player movements
 
 # Screen IDs
 TITLESCREEN = 0
 PLAYSCREEN = 1
 
-# Movement
-PLAYER_UP = [0, -1]
-PLAYER_DOWN = [0, 1]
-PLAYER_LEFT = [-1, 0]
-PLAYER_RIGHT = [1, 0]
+# Levels
+LEVELPATHS = ['level1.txt', 'level2.txt', 'level3.txt', 'level4.txt', 'mapTest.txt']

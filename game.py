@@ -29,6 +29,7 @@ class Game:
 
         while self.running:
             self.handleEvents()
+            self.update()
             self.draw()
 
             self.clock.tick(FPS) # This ensures framerate will cap at FPS
@@ -40,9 +41,13 @@ class Game:
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.running = False
+                    return
                 
             self.currentScreen.handleEvents(event) # Handle events for currently active screen
     
+    def update(self):
+        self.currentScreen.update()
+
     def draw(self):
         self.window.fill(BLACK)
         self.currentScreen.draw(self.window) # Draw currently active screen
