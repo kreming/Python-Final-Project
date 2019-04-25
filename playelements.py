@@ -30,7 +30,7 @@ class Player:
         self.x += self.xVel
         self.y += self.yVel
 
-        if self.x >= len(map[0]) or self.y >= len(map) or map[self.y][self.x] == '1': # Wall
+        if self.x < 0 or self.y < 0 or self.x >= len(map[0]) or self.y >= len(map) or map[self.y][self.x] == '1': # Wall
             self.x = oldPos[0]
             self.y = oldPos[1]
             return False
