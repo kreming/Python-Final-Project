@@ -7,6 +7,7 @@ class Player:
         self.y = y
         self.size = size
         self.trail = []
+        self.movesLeft = 0
 
         self.xVel = 0
         self.yVel = 0
@@ -22,18 +23,20 @@ class Player:
         self.yVel = 0
 
     def move(self, map):
+        if self.xVel == 0 and self.yVel == 0:
+            return False
+
         oldPos = [self.x, self.y]
-        #self.x += dir[0]
-        #self.y += dir[1]
         self.x += self.xVel
         self.y += self.yVel
 
         if self.x >= len(map[0]) or self.y >= len(map) or map[self.y][self.x] == '1': # Wall
             self.x = oldPos[0]
             self.y = oldPos[1]
-            return False # Move computer?
+            return False
         else:
             self.trail.append([oldPos])
+            self.movesLeft -= 1
             return True
     
     def checkWin(self, map):
@@ -47,6 +50,10 @@ class Player:
         drawY = self.relY * self.size
 
         pg.draw.rect(screen, self.color, pg.Rect(drawX, drawY, self.size, self.size))
+
+        font = pg.font.Font(None, 50)
+        movesText = font.render("Moves left: " + str(self.movesLeft), True, WHITE)
+        screen.blit(movesText, [20, HEIGHT - 45])
 
 class Computer:
     def __init__(self, x, y, size, path):

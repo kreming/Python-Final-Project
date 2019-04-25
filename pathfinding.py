@@ -1,116 +1,63 @@
-"""from pypaths import astar
-
-
-def path_find():
-    finder = astar.pathfinder()
-    return finder((0, 5), (8, 2))
-"""
-
-#https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
 class Node():
-    """A node class for A* Pathfinding"""
-
     def __init__(self, parent=None, position=None):
         self.parent = parent
         self.position = position
-
-        self.g = 0
-        self.h = 0
-        self.f = 0
 
     def __eq__(self, other):
         return self.position == other.position
 
 
-def astar(maze, start, end):
-    """Returns a list of tuples as a path from the given start to the given end in the given maze"""
-
-    # Create start and end node
+def breadthFirst(maze, start, end):
+    """
+    Breadth-first algorithm for pathfinding
+    Start and end coordinates are [row, col]
+    """
     start_node = Node(None, start)
-    start_node.g = start_node.h = start_node.f = 0
-    end_node = Node(None, end)
-    end_node.g = end_node.h = end_node.f = 0
+    end_node = Node(None, end) # Used to check if done
+    nodeList = []
+    visitedNodes = []
+    nodeList.append(start_node) # Start at first node
+    while len(nodeList) > 0:
+        neighbors = [] # Nearby valid nodes
+        for node in nodeList:
+            nodeList.remove(node)
+            visitedNodes.append(node)
+            if node == end_node: # Reached end, return path
+                path = []
+                current = node
+                while current is not None:
+                    path.append(current.position)
+                    current = current.parent
+                return path[::-1] # Return reversed path
 
-    # Initialize both open and closed list
-    open_list = []
-    closed_list = []
+            for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]: # Neighbor positions
+                neighborNode = (node.position[0] + new_position[0], node.position[1] + new_position[1])
 
-    # Add the start node
-    open_list.append(start_node)
-
-    # Loop until you find the end
-    while len(open_list) > 0:
-
-        # Get the current node
-        current_node = open_list[0]
-        current_index = 0
-        for index, item in enumerate(open_list):
-            if item.f < current_node.f:
-                current_node = item
-                current_index = index
-
-        # Pop current off open list, add to closed list
-        open_list.pop(current_index)
-        closed_list.append(current_node)
-
-        # Found the goal
-        if current_node == end_node:
-            path = []
-            current = current_node
-            while current is not None:
-                path.append(current.position)
-                current = current.parent
-            return path[::-1] # Return reversed path
-
-        # Generate children
-        children = []
-        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]:#, (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
-
-            # Get node position
-            node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
-
-            # Make sure within range
-            #if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
-            #    continue
-            if node_position[0] > (len(maze) - 1):
-                continue
-            
-            if node_position[0] < 0:
-                continue
-            
-            if node_position[1] > (len(maze[len(maze)-1]) -1):
-                continue
-            
-            if node_position[1] < 0:
-                continue
-
-            # Make sure walkable terrain
-            if maze[node_position[0]][node_position[1]] == '1':
-                continue
-
-            # Create new node
-            new_node = Node(current_node, node_position)
-
-            # Append
-            children.append(new_node)
-
-        # Loop through children
-        for child in children:
-
-            # Child is on the closed list
-            for closed_child in closed_list:
-                if child == closed_child:
+                #Neighbor is in bounds
+                if neighborNode[0] > (len(maze)-1) or neighborNode[0] < 0 or neighborNode[1] > (len(maze[0])-1) or neighborNode[1] < 0:
                     continue
-
-            # Create the f, g, and h values
-            child.g = current_node.g + 1
-            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
-            child.f = child.g + child.h
-
-            # Child is already in the open list
-            for open_node in open_list:
-                if child == open_node and child.g > open_node.g:
+                
+                #Neighbor is not a wall
+                if maze[neighborNode[0]][neighborNode[1]] == '1':
                     continue
-
-            # Add the child to the open list
-            open_list.append(child)
+                
+                # Make sure we haven't touched this node ever yet
+                add = True
+                newNode = Node(node, neighborNode)
+                for tNode in nodeList:
+                    if tNode == newNode:
+                        add = False
+                for tNode in visitedNodes:
+                    if tNode == newNode:
+                        add = False
+                for tNode in neighbors:
+                    if tNode == newNode:
+                        add = False
+                
+                if add:
+                    neighbors.append(newNode)
+        
+        for node in neighbors:
+            nodeList.append(node)
+    
+    return None # End is not reachable

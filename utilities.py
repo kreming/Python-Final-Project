@@ -1,12 +1,13 @@
-import os
 import pygame as pg
 
-_image_library = {}
-def get_image(path):
-        global _image_library
-        image = _image_library.get(path)
-        if image == None:
-                canonicalized_path = path.replace('/', os.sep).replace('\\', os.sep)
-                image = pg.image.load(canonicalized_path)
-                _image_library[path] = image
+images = {}
+def get_image(filePath):
+        """
+        Load images only once and store them once they are loaded
+        """
+        global images
+        image = images.get(filePath)
+        if image == None: # Image is not yet loaded, load now
+                image = pg.image.load('Assets/'+filePath)
+                images[filePath] = image
         return image

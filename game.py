@@ -19,7 +19,7 @@ class Game:
         """
         This function allows the screen to be changed from anywhere where the game object is exposed
         """
-        self.currentScreen = self.screens[newScreenID] 
+        self.currentScreen = self.screens[newScreenID]
 
     def run(self):
         """
@@ -36,8 +36,9 @@ class Game:
     
     def handleEvents(self):
         for event in pg.event.get():
-            if event.type == pg.QUIT:
+            if event.type == pg.QUIT: # If player quits, return immediately
                 self.running = False
+                return
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_ESCAPE:
                     self.running = False
@@ -46,9 +47,10 @@ class Game:
             self.currentScreen.handleEvents(event) # Handle events for currently active screen
     
     def update(self):
-        self.currentScreen.update()
+        self.currentScreen.update() # Update currently active screen
 
     def draw(self):
         self.window.fill(BLACK)
         self.currentScreen.draw(self.window) # Draw currently active screen
         pg.display.flip()
+        #print(self.clock.get_fps()) #See FPS
