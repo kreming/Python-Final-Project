@@ -20,4 +20,4 @@ TITLESCREEN = 0
 PLAYSCREEN = 1
 
 # Levels
-LEVELPATHS = ['level1.txt', 'level2.txt', 'level3.txt', 'level4.txt', 'level5.txt', 'level6.txt', 'level7.txt']
+LEVELPATHS = ['level1.txt', 'level2.txt', 'level3.txt', 'level4.txt', 'level5.txt', 'level6.txt', 'level7.txt', 'level8.txt']
